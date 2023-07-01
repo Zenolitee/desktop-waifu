@@ -9,12 +9,13 @@ ELEVENLABS_VOICE = None
 
 env_voice = os.environ.get("ELEVENLABS_VOICE")
 
-if env_voice and env_voice.strip():
-    ELEVENLABS_VOICE = ELEVENLABS_CLIENT.get_voices_by_name(env_voice)[0] 
+voices = ELEVENLABS_CLIENT.get_voices_by_name(env_voice)
+if len(voices) > 0:
+    ELEVENLABS_VOICE = voices[0]
 else:
-    # create voice
-    voiceId, generatedAudio = ELEVENLABS_CLIENT.design_voice(gender="female", accent="american", age="young", accent_strength=1.5)
-    ELEVENLABS_VOICE = ELEVENLABS_CLIENT.save_designed_voice(voiceId, "waifu_temp_voice")
+    print("No voices found.")
+
+
 
 def speak(message):
     try:

@@ -1,5 +1,6 @@
 import utils.audio
 import utils.vtube_studio
+import whisper
 
 import openai, requests, urllib, os, wave, io
 
@@ -9,9 +10,9 @@ VOICEVOX_LOCAL_FILE = "test.wav"
 def transcribe(filename):
     audio = open(filename, "rb")
 
-    transcript = openai.Audio.transcribe("whisper-1", audio)
-
-    message = transcript.text
+    model = whisper.load_model("tiny")
+    transcript = model.transcribe(filename)
+    message = transcript["text"]
 
     if message is None or len(message.strip()) == 0:
         return None
